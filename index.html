@@ -3,9 +3,12 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Racing+Sans+One&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Racing+Sans+One&display=swap" rel="stylesheet"> 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Sebastian Siebert</title>
     <style>
         * {
@@ -14,12 +17,19 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #0a0a0a;
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -30,23 +40,28 @@
 
         .hero {
             height: 100vh;
+            min-height: 600px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             position: relative;
+            padding: 20px;
         }
 
         .hero-image {
-            width: 300px;
-            height: 300px;
+            width: min(300px, 70vw);
+            height: min(300px, 70vw);
+            max-width: 300px;
+            max-height: 300px;
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid #333;
             margin-bottom: 40px;
             box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease;
+            will-change: transform;
         }
 
         .hero-image:hover {
@@ -54,25 +69,27 @@
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             font-weight: 300;
             margin-bottom: 20px;
             background: linear-gradient(45deg, #ffffff, #888);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            word-break: break-word;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 4vw, 1.3rem);
             color: #aaa;
             max-width: 600px;
+            padding: 0 20px;
         }
 
         .content-section {
-            padding: 100px 0;
+            padding: 80px 0;
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(30px);
             transition: all 0.8s ease;
         }
 
@@ -83,78 +100,88 @@
 
         .section-content {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 60px;
-            margin-bottom: 80px;
-        }
-
-        .section-content.reverse {
-            flex-direction: row-reverse;
+            gap: 40px;
+            margin-bottom: 60px;
         }
 
         .text-content {
             flex: 1;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
         }
 
         .text-content h2 {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
             margin-bottom: 30px;
             font-weight: 300;
             color: #ffffff;
         }
 
         .text-content p {
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 3vw, 1.1rem);
             color: #ccc;
             line-height: 1.8;
             margin-bottom: 20px;
+            text-align: left;
         }
 
         .image-content {
             flex: 1;
+            width: 100%;
+            max-width: 500px;
         }
 
         .section-image {
             width: 100%;
-            height: 400px;
+            height: auto;
+            min-height: 250px;
+            max-height: 400px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s ease;
+            will-change: transform;
         }
 
         .section-image:hover {
-            transform: translateY(-10px);
+            transform: translateY(-5px);
         }
 
         .gallery {
-            padding: 100px 0;
+            padding: 80px 0;
         }
 
         .gallery h2 {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 80px;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin-bottom: 60px;
             font-weight: 300;
+            padding: 0 20px;
         }
 
         .gallery-grid {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            padding: 0 20px;
         }
 
         .gallery-item {
-            width: 666px;
-            height: 375px;
+            width: 100%;
+            max-width: 666px;
+            aspect-ratio: 16/9;
             border-radius: 15px;
             overflow: hidden;
             position: relative;
             opacity: 0;
-            transform: translateY(100px) scale(0.8);
+            transform: translateY(50px) scale(0.95);
             transition: all 0.8s ease;
             cursor: pointer;
+            will-change: transform, opacity;
         }
 
         .gallery-item.animate {
@@ -162,19 +189,20 @@
             transform: translateY(0) scale(1);
         }
 
-        .gallery-item:nth-child(1) { transition-delay: 0.2s; }
-        .gallery-item:nth-child(2) { transition-delay: 0.4s; }
-        .gallery-item:nth-child(3) { transition-delay: 0.6s; }
+        .gallery-item:nth-child(1) { transition-delay: 0.1s; }
+        .gallery-item:nth-child(2) { transition-delay: 0.2s; }
+        .gallery-item:nth-child(3) { transition-delay: 0.3s; }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.3s ease;
+            will-change: transform;
         }
 
         .gallery-item:hover img {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .gallery-overlay {
@@ -189,6 +217,7 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease;
+            pointer-events: none;
         }
 
         .gallery-item:hover .gallery-overlay {
@@ -197,9 +226,10 @@
 
         .gallery-text {
             color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 600;
             text-align: center;
+            padding: 20px;
         }
 
         .scroll-indicator {
@@ -217,31 +247,181 @@
             background: linear-gradient(to bottom, #ffffff, #888);
             height: 0%;
             transition: height 0.1s ease;
+            will-change: height;
         }
 
+        /* Touch-friendly interactions */
+        @media (hover: none) and (pointer: coarse) {
+            .gallery-item:active {
+                transform: translateY(0) scale(0.98);
+            }
+            
+            .gallery-item:active .gallery-overlay {
+                opacity: 1;
+            }
+            
+            .hero-image:active {
+                transform: scale(1.02);
+            }
+            
+            .section-image:active {
+                transform: translateY(-2px);
+            }
+        }
+
+        /* Mobile optimizations */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+            .hero {
+                min-height: 500px;
+                padding: 40px 20px;
             }
             
             .hero-image {
-                width: 200px;
-                height: 200px;
+                width: min(250px, 60vw);
+                height: min(250px, 60vw);
+                margin-bottom: 30px;
+            }
+            
+            .content-section {
+                padding: 60px 0;
             }
             
             .section-content {
-                flex-direction: column;
-                gap: 40px;
+                gap: 30px;
+                margin-bottom: 40px;
             }
             
-            .section-content.reverse {
-                flex-direction: column;
+            .text-content {
+                padding: 0 10px;
+            }
+            
+            .text-content h2 {
+                margin-bottom: 20px;
+            }
+            
+            .gallery {
+                padding: 60px 0;
+            }
+            
+            .gallery h2 {
+                margin-bottom: 40px;
+            }
+            
+            .gallery-grid {
+                gap: 15px;
+                padding: 0 15px;
             }
             
             .gallery-item {
-                width: 100%;
-                max-width: 350px;
-                height: 200px;
+                border-radius: 10px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 30px 15px;
+                min-height: 450px;
+            }
+            
+            .hero-image {
+                width: min(200px, 50vw);
+                height: min(200px, 50vw);
+                margin-bottom: 25px;
+                border-width: 3px;
+            }
+            
+            .content-section {
+                padding: 50px 0;
+            }
+            
+            .section-content {
+                gap: 25px;
+            }
+            
+            .text-content {
+                padding: 0 5px;
+            }
+            
+            .text-content h2 {
+                margin-bottom: 15px;
+            }
+            
+            .text-content p {
+                margin-bottom: 15px;
+            }
+            
+            .gallery {
+                padding: 50px 0;
+            }
+            
+            .gallery-grid {
+                padding: 0 10px;
+                gap: 12px;
+            }
+            
+            .container {
+                padding: 0 10px;
+            }
+            
+            .scroll-indicator {
+                width: 3px;
+            }
+        }
+
+        /* Landscape mobile orientation */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                height: auto;
+                min-height: 400px;
+                padding: 30px 20px;
+            }
+            
+            .hero-image {
+                width: 150px;
+                height: 150px;
+                margin-bottom: 20px;
+            }
+            
+            .content-section {
+                padding: 40px 0;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .hero-image {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+            
+            .section-image,
+            .gallery-item img {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #000000;
             }
         }
     </style>
@@ -252,7 +432,7 @@
     </div>
 
     <section class="hero">
-        <img src="img/siebert.jpg" alt="Alexander Weber" class="hero-image">
+        <img src="img/siebert.jpg" alt="Sebastian Siebert" class="hero-image" loading="eager">
         <h1>Sebastian Siebert</h1>
         <p>Director of Strategic Design - Dedrone by Axon</p>
     </section>
@@ -263,10 +443,9 @@
                 <div class="text-content">
                     <h2>About</h2>
                     <p>Sebastian Siebert is a Strategic Design Director based in Kassel, Germany, with over 20 years of experience in branding, UX/UI, and digital product design. He holds degrees in Graphic Design and Business Informatics, combining creative expertise with a strong technical foundation.</p>
-                    <p></p>
                 </div>
                 <div class="image-content">
-                    <img src="img/66fd221d7a3565f0221084ca_Dedrone-by-Axon-Hero-v3-p-1600.png" alt="Kreative Arbeit" class="section-image">
+                    <img src="img/66fd221d7a3565f0221084ca_Dedrone-by-Axon-Hero-v3-p-1600.png" alt="Kreative Arbeit" class="section-image" loading="lazy">
                 </div>
             </div>
         </div>
@@ -274,14 +453,13 @@
 
     <section class="content-section">
         <div class="container">
-            <div class="section-content reverse">
+            <div class="section-content">
                 <div class="text-content">
                     <h2>Informations</h2>
                     <p>Currently at Dedrone, Sebastian leads design initiatives with a focus on user-centered solutions and strategic brand development. His previous roles include co-founder and creative director at PLUSX, where he guided numerous brands through visual and digital transformation.</p>
-                    <p></p>
                 </div>
                 <div class="image-content">
-                    <img src="img/229.jpg" alt="Innovation" class="section-image">
+                    <img src="img/229.jpg" alt="Innovation" class="section-image" loading="lazy">
                 </div>
             </div>
         </div>
@@ -292,29 +470,58 @@
             <h2>Bewertungen auf LinkedIn</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="img/bwtung1.png" alt="Projekt 1">
+                    <img src="img/bwtung1.png" alt="LinkedIn Bewertung 1" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-text">LinkedIn Bewertung</div>
+                    </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="img/bwtung2.png" alt="Projekt 2">
+                    <img src="img/bwtung2.png" alt="LinkedIn Bewertung 2" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-text">LinkedIn Bewertung</div>
+                    </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="img/bwtung3.png" alt="Projekt 3">
+                    <img src="img/bwtung3.png" alt="LinkedIn Bewertung 3" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-text">LinkedIn Bewertung</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <script>
-        window.addEventListener('scroll', () => {
+        // Throttle function for performance
+        function throttle(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Optimized scroll progress
+        const updateScrollProgress = throttle(() => {
             const scrollTop = window.pageYOffset;
             const docHeight = document.body.offsetHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            document.querySelector('.scroll-progress').style.height = scrollPercent + '%';
-        });
+            const scrollPercent = Math.min((scrollTop / docHeight) * 100, 100);
+            const progressElement = document.querySelector('.scroll-progress');
+            if (progressElement) {
+                progressElement.style.height = scrollPercent + '%';
+            }
+        }, 16);
 
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+        // Intersection Observer for content sections
         const observerOptions = {
-            threshold: 0.3,
-            rootMargin: '0px 0px -100px 0px'
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -329,6 +536,7 @@
             observer.observe(section);
         });
 
+        // Gallery animation observer
         const galleryObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -338,21 +546,68 @@
                     });
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.1 });
 
-        galleryObserver.observe(document.querySelector('.gallery'));
+        const galleryElement = document.querySelector('.gallery');
+        if (galleryElement) {
+            galleryObserver.observe(galleryElement);
+        }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.documentElement.style.scrollBehavior = 'smooth';
+        // Optimized parallax effect for hero image (disabled on mobile for performance)
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (!isMobile) {
+            const parallaxHero = throttle(() => {
+                const scrolled = window.pageYOffset;
+                const heroImage = document.querySelector('.hero-image');
+                if (heroImage && scrolled < window.innerHeight) {
+                    const parallaxValue = scrolled * 0.3;
+                    heroImage.style.transform = `translateY(${parallaxValue}px) scale(${1 + scrolled * 0.00005})`;
+                }
+            }, 16);
+
+            window.addEventListener('scroll', parallaxHero, { passive: true });
+        }
+
+        // Touch feedback for mobile
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    this.style.transform = 'translateY(0) scale(0.98)';
+                }, { passive: true });
+                
+                item.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                }, { passive: true });
+            });
+        }
+
+        // Preload critical images
+        const criticalImages = [
+            'img/siebert.jpg'
+        ];
+
+        criticalImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
         });
 
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroImage = document.querySelector('.hero-image');
-            if (heroImage) {
-                heroImage.style.transform = `translateY(${scrolled * 0.5}px) scale(${1 + scrolled * 0.0001})`;
-            }
-        });
+        // Service Worker registration for offline support (if needed)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Register service worker here if needed
+            });
+        }
+
+        // Handle viewport changes
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Recalculate any layout-dependent values
+                updateScrollProgress();
+            }, 250);
+        }, { passive: true });
     </script>
 </body>
 </html>
